@@ -3,7 +3,7 @@ import scrapy
 import json
 from bs4 import BeautifulSoup
 from scrapy import FormRequest, Request
-from urllib.parse import urlencode
+from urllib import urlencode
 from angel_com import tools
 
 

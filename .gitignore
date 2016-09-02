@@ -1,3 +1,8 @@
 *pyc
 *txt
 *json
+*csv
+build/
+project.egg-info/
+scrapinghub.yml
+setup.py
