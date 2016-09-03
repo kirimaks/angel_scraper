@@ -4,7 +4,7 @@ import json
 from bs4 import BeautifulSoup
 from scrapy import FormRequest, Request
 from urllib import urlencode
-from angel_com import tools
+import my_scraper.tools.AngelTools as tools
 
 
 class AngelSpider(scrapy.Spider):
