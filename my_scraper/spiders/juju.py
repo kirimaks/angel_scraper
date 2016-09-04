@@ -19,12 +19,16 @@ class JujuSpider(scrapy.Spider):
 
     def parse(self, response):
         search_results = response.xpath("//ul[@class='job_results']")
-        search_item_xp = ".//a[contains(@class, 'result')]/@href"
+        search_item_xp = ".//a[contains(@class, 'result')]"
 
         for job_url in search_results.xpath(search_item_xp):
-            job_url = job_url.extract()
-            yield scrapy.Request(job_url, callback=self.parse_job)
+            job_href = job_url.xpath("@href").extract()[0]
+            job_title = job_url.xpath("@title").extract()[0]
+            rq = scrapy.Request(job_href, callback=self.parse_job)
+            rq.meta['job_title'] = job_title
+            yield rq
 
+        # Next page.
         next_xp = "//a[@title='Next Page']/@href"
         next = response.xpath(next_xp).extract()
         if next:
@@ -36,10 +40,7 @@ class JujuSpider(scrapy.Spider):
         if response.url in tools.broken_links:
             yield None
 
-        try:
-            title = response.xpath("//title/text()").extract()[0]
-        except IndexError:
-            title = "null"
+        title = response.meta['job_title']
 
         desc = tools.get_juju_description(response)
 
