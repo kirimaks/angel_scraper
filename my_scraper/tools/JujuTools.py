@@ -1,6 +1,7 @@
 import bs4
 from urlparse import urlparse
 import scrapy.exceptions
+import re
 
 
 class Parser:
@@ -52,45 +53,45 @@ class Parser:
 
     def juju_com(self, soup):
         try:
-            desc = soup.find_all("dd", attrs={'class': 'description'})[0]
+            desc = soup.find("dd", attrs={'class': 'description'})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
 
     def themuse_com(self, soup):
         try:
-            desc = soup.find_all("div", attrs={'class': 'job-post-description'})[0]
+            desc = soup.find("div", attrs={'class': 'job-post-description'})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
 
     def ihiresecondaryteachers_com(self, soup):
         try:
-            desc = soup.find_all("div", attrs={'class': 'job-description'})[0]
+            desc = soup.find("div", attrs={'class': 'job-description'})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
 
     def startwire_com(self, soup):
         try:
-            desc = soup.find_all("div", attrs={'class': 'ua-job-description'})[0]
+            desc = soup.find("div", attrs={'class': 'ua-job-description'})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
 
     def internationaleducationgroup_applytojob_com(self, soup):
         try:
-            desc = soup.find_all("div", attrs={"id": "resumator-job-description"})[0]
+            desc = soup.find("div", attrs={"id": "resumator-job-description"})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -123,7 +124,7 @@ class Parser:
         try:
             desc = soup.find("div", attrs={"class": "detailsJobDescription"})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -134,7 +135,7 @@ class Parser:
             # Remove js
             [i.extract() for i in desc.find_all("script")]
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -143,7 +144,7 @@ class Parser:
         try:
             desc = soup.find("tr", id='trpositionsummary')
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -152,7 +153,7 @@ class Parser:
         try:
             desc = soup.find("div", attrs={"class": "description"})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -161,7 +162,7 @@ class Parser:
         try:
             desc = soup.find("article", id="Listing")
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -171,7 +172,7 @@ class Parser:
             desc = soup.find("div", attrs={"class": "main"}).article
             [i.extract() for i in desc.find_all("script")]
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -180,7 +181,7 @@ class Parser:
         try:
             desc = soup.find("div", attrs={"class", "describe"})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -189,7 +190,7 @@ class Parser:
         try:
             desc = soup.find("div", attrs={"class", "description"})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -199,14 +200,14 @@ class Parser:
             desc = soup.find("div", attrs={"class", "jobDisplay"})
             [i.extract() for i in desc.find_all("script")]
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
 
     def minnesotajobs_com(self, soup):
         try:
-            desc = soup.find("div", attrs={"class": "view_long"})
+            desc = soup.find_all("div", attrs={"class": "view_long"})[1]
             desc = desc.get_text(" ", strip=True)
         except IndexError:
             desc = "null"
@@ -217,7 +218,7 @@ class Parser:
         try:
             desc = soup.find("div", attrs={"class": "job-posting"})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -226,7 +227,7 @@ class Parser:
         try:
             desc = soup.find("div", attrs={"class": "bti-jd-description"})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -235,7 +236,7 @@ class Parser:
         try:
             desc = soup.find("div", attrs={"itemprop": "description"})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -244,7 +245,7 @@ class Parser:
         try:
             desc = soup.find("div", id="description")
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -253,7 +254,7 @@ class Parser:
         try:
             desc = soup.find("span", id="lblJobDesc")
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -262,16 +263,16 @@ class Parser:
         try:
             desc = soup.find("div", id="resumator-job-description")
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
 
     def educators_on_call_workable_com(self, soup):
         try:
-            desc = soup.find_all("section", attrs={"class": "section section--text"})[0]
+            desc = soup.find("section", attrs={"class": "section section--text"})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -280,7 +281,7 @@ class Parser:
         try:
             desc = soup.find("div", attrs={"class": "detailsJobDescription"})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -289,7 +290,7 @@ class Parser:
         try:
             desc = soup.find("p", id="docs-internal-guid-c9adc6d3-8e76-4327-a73d-44b8e48e759a")
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -298,7 +299,7 @@ class Parser:
         try:
             desc = soup.find("div", attrs={"class": "description"})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -307,7 +308,7 @@ class Parser:
         try:
             desc = soup.find("div", attrs={"class": "job"})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -316,7 +317,7 @@ class Parser:
         try:
             desc = soup.find("table", id="CRCareers1_tblJobDescrDetail")
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
@@ -335,10 +336,27 @@ class Parser:
         try:
             desc = soup.find("div", attrs={"itemprop": "description"})
             desc = desc.get_text(" ", strip=True)
-        except IndexError:
+        except AttributeError:
             desc = "null"
 
         return desc
+
+
+def clean_desc(desc):
+
+    # Delete phones.
+    strip_phone = re.compile(r"\(?\d+\)?-?\d+-?\d+-?\d*")
+    desc = strip_phone.sub("", desc)
+
+    # Delete mails.
+    strip_phone = re.compile(r"\w+@\w+\.\w+")
+    desc = strip_phone.sub("", desc)
+
+    # Strip www.
+    strip_www = re.compile(r"http://\w*.?\w+\.(com|org|net)")
+    desc = strip_www.sub("", desc)
+
+    return desc
 
 
 def get_juju_description(response):
@@ -351,7 +369,12 @@ def get_juju_description(response):
         raise scrapy.exceptions.CloseSpider("No parser for: [{}],\
  netloc: [{}]".format(response.url, netloc))
 
-    return parser(soup)
+    desc = parser(soup)
+
+    if desc != "null":
+        desc = clean_desc(desc)
+
+    return desc
 
 broken_links = [
     'https://www.workable.com/',
